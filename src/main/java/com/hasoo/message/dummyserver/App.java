@@ -1,5 +1,6 @@
 package com.hasoo.message.dummyserver;
 
+import com.hasoo.message.dummyserver.netty.UmgpServer;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -7,10 +8,14 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 @Slf4j
-public class App 
-{
-    public static void main( String[] args )
-    {
-        log.info("Hello World!");
+public class App {
+  public static void main(String[] args) {
+    UmgpServer umgpServer = new UmgpServer(4000);
+    try {
+      umgpServer.run();
+    } catch (Exception e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
     }
+  }
 }
