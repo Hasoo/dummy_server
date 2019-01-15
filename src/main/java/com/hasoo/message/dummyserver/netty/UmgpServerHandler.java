@@ -2,6 +2,7 @@ package com.hasoo.message.dummyserver.netty;
 
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
+import com.hasoo.message.dummyserver.util.Util;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -11,18 +12,25 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class UmgpServerHandler extends ChannelInboundHandlerAdapter {
+  @Override
+  public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
+    log.debug("connected->{}", ctx.toString());
+    super.channelRegistered(ctx);
+  }
 
   @Override
   public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
+    log.debug(ctx.toString());
     super.channelUnregistered(ctx);
   }
 
   @Override
   public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
     ByteBuf byteBuf = (ByteBuf) msg;
+    log.debug(Util.dump(byteBuf.toString()));
     String line = byteBuf.toString(Charset.defaultCharset());
     line = line.trim();
-    log.info(line);
+    log.info(Util.dump(line));
   }
 
   @Override
