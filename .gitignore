@@ -16,3 +16,4 @@ dependency-reduced-pom.xml
 log/
 logs/
 target/
+.attach_pid*
