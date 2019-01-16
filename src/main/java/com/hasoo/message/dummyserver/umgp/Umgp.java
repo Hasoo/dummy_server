@@ -1,9 +1,7 @@
 package com.hasoo.message.dummyserver.umgp;
 
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Data
 public class Umgp {
   /* @formatter:off */
@@ -115,7 +113,7 @@ public class Umgp {
   public void parseDataPart(String buf) {
     if (buf.equals(END)) {
       if (0 < this.data.length()) {
-        this.data.deleteCharAt(this.data.length());
+        this.data.deleteCharAt(this.data.length() - 1);
       }
       this.completedEnd = true;
       return;
@@ -162,5 +160,17 @@ public class Umgp {
     } else {
       throw new RuntimeException(String.format("invalid packet[%s]", buf));
     }
+  }
+
+  public static String headerPart(String part) {
+    return Umgp.BEGIN + " " + part + "\r\n";
+  }
+
+  public static String dataPart(String field, String value) {
+    return field + ":" + value + "\r\n";
+  }
+
+  public static String end() {
+    return Umgp.END + "\r\n";
   }
 }

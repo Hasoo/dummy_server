@@ -1,5 +1,7 @@
 package com.hasoo.message.dummyserver.netty;
 
+import java.util.concurrent.TimeUnit;
+import com.hasoo.message.dummyserver.umgp.UmgpWorker;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -29,14 +31,21 @@ public class UmgpServer {
         .childHandler(new ChannelInitializer<SocketChannel>() {
           @Override
           protected void initChannel(SocketChannel ch) throws Exception {
-            ch.pipeline().addLast(new LineBasedFrameDecoder(4096)).addLast(new UmgpServerHandler())
-                .addLast(new ReadTimeoutHandler(10))
-                .addLast(new LineEncoder(LineSeparator.WINDOWS));
+        /* @formatter:off */
+            UmgpWorker umgpWorker = new UmgpWorker();
+
+            ch.pipeline()
+                .addLast(new ReadTimeoutHandler(60, TimeUnit.SECONDS))
+                .addLast(new LineEncoder(LineSeparator.WINDOWS))
+                .addLast(new LineBasedFrameDecoder(4096))
+                .addLast(new UmgpTimeoutHandler(umgpWorker))
+                .addLast(new UmgpServerHandler(umgpWorker))
+                ;
+        /* @formatter:on */
           }
         }).childOption(ChannelOption.TCP_NODELAY, true);
 
     ChannelFuture f = serverBootstrap.bind(port).sync();
     f.channel().closeFuture().sync();
   }
-
 }
