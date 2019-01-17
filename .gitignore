@@ -17,3 +17,5 @@ log/
 logs/
 target/
 .attach_pid*
+que/
+db/
