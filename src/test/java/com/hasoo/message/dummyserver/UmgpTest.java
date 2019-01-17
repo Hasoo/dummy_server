@@ -92,4 +92,18 @@ public class UmgpTest {
     assertEquals("testmessage\nhi", umgp.getData().toString());
   }
 
+  @Test
+  public void testCreationPacket() {
+    StringBuilder packet = new StringBuilder();
+    packet.append(Umgp.headerPart(Umgp.CONNECT));
+    packet.append(Umgp.dataPart(Umgp.ID, "test"));
+    packet.append(Umgp.dataPart(Umgp.PASSWORD, "testpwd"));
+    packet.append(Umgp.dataPart(Umgp.REPORTLINE, "N"));
+    packet.append(Umgp.dataPart(Umgp.VERSION, "SMGP/2.0.5"));
+    packet.append(Umgp.end());
+    assertEquals(
+        "BEGIN CONNECT\r\nID:test\r\nPASSWORD:testpwd\r\nREPORTLINE:N\r\nVERSION:SMGP/2.0.5\r\nEND\r\n",
+        packet.toString());
+  }
+
 }

@@ -1,7 +1,6 @@
 package com.hasoo.message.dummyserver;
 
 import com.hasoo.message.dummyserver.netty.UmgpServer;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Hello world!
