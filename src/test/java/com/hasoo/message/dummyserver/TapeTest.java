@@ -8,11 +8,10 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import com.google.gson.Gson;
+import com.hasoo.message.dummyserver.util.Util;
 import com.squareup.tape.FileObjectQueue;
 import com.squareup.tape.ObjectQueue;
 import lombok.AllArgsConstructor;
@@ -46,9 +45,9 @@ public class TapeTest {
   @Test
   public void testTape() {
     try {
-      String quePath = "que";
-      String queFilename = "test.que";
-      File queFile = new File(quePath + File.separatorChar + queFilename);
+      String path = "que";
+      String file = "test.que";
+      File queFile = Util.getFilePath(path, file).toFile();
       if (queFile.exists()) {
         queFile.delete();
       }
@@ -62,13 +61,5 @@ public class TapeTest {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-  }
-
-  public Path getFilePath(String fileDir, String filename) {
-    File dir = new File(fileDir);
-    if (!dir.exists())
-      dir.mkdirs();
-
-    return Paths.get(fileDir + File.separatorChar + filename);
   }
 }

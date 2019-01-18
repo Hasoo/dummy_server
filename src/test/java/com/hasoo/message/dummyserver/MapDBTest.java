@@ -3,9 +3,6 @@ package com.hasoo.message.dummyserver;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,6 +11,7 @@ import org.mapdb.DBMaker;
 import org.mapdb.DataInput2;
 import org.mapdb.DataOutput2;
 import org.mapdb.Serializer;
+import com.hasoo.message.dummyserver.util.Util;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -45,7 +43,7 @@ public class MapDBTest implements Serializable {
   @Test
   public void testHashMap() {
     String path = "db", file = "report.db";
-    File report = getFilePath(path, file).toFile();
+    File report = Util.getFilePath(path, file).toFile();
     if (report.exists()) {
       report.delete();
     }
@@ -66,13 +64,5 @@ public class MapDBTest implements Serializable {
     Assertions.assertEquals(cAge, map.get(cName).getAge());
 
     db.close();
-  }
-
-  public Path getFilePath(String path, String filename) {
-    File dir = new File(path);
-    if (!dir.exists())
-      dir.mkdirs();
-
-    return Paths.get(path + File.separatorChar + filename);
   }
 }
