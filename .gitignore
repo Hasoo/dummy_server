@@ -19,3 +19,4 @@ target/
 .attach_pid*
 que/
 db/
+seq/
