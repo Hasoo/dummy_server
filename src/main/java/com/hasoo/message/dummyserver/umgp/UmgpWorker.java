@@ -1,7 +1,11 @@
 package com.hasoo.message.dummyserver.umgp;
 
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
+import java.util.Iterator;
 import com.hasoo.message.dummyserver.entity.ClientContext;
+import com.hasoo.message.dummyserver.entity.ReportQue;
+import com.hasoo.message.dummyserver.util.Util;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 
@@ -10,6 +14,11 @@ public class UmgpWorker {
   ContextManager contextManager = new ContextManager();
   LineHandler sendLineHandler = new SendLineHandler();
   LineHandler reportLineHandler = new ReportLineHandler();
+  DeliveryRepository deliveryRepository;
+
+  public UmgpWorker(DeliveryRepository deliveryRepository) {
+    this.deliveryRepository = deliveryRepository;
+  }
 
   public void connected(Channel channel) {
     contextManager.put(channel);
@@ -77,14 +86,38 @@ public class UmgpWorker {
     ClientContext clientContext = contextManager.get(channel);
     InetSocketAddress clientAddress = (InetSocketAddress) channel.remoteAddress();
 
-    String ret;
     if (0 != clientContext.getUsername().length()) {
-      ret = String.format("%s:%d %s %s", clientAddress.getHostName(), clientAddress.getPort(),
+      return String.format("%s:%d %s %s", clientAddress.getHostName(), clientAddress.getPort(),
           clientContext.getUsername(), clientContext.isReportline() ? "Y" : "N");
-    } else {
-      ret = String.format("%s:%d", clientAddress.getHostName(), clientAddress.getPort());
     }
+    return String.format("%s:%d", clientAddress.getHostName(), clientAddress.getPort());
+  }
 
-    return ret;
+  public void deliver() {
+    try {
+      ArrayList<ClientContext> ccs = contextManager.getReportLine();
+      Iterator<ClientContext> it = ccs.iterator();
+      while (it.hasNext()) {
+        ClientContext cc = it.next();
+        ReportQue que = deliveryRepository.get(cc.getUsername());
+        if (null != que) {
+          sendReport(cc.getChannel(), que);
+        }
+      }
+    } catch (Exception ex) {
+      log.error(Util.getStackTrace(ex));
+    }
+  }
+
+  private void sendReport(Channel channel, ReportQue que) {
+    StringBuilder packet = new StringBuilder();
+    packet.append(Umgp.headerPart(Umgp.REPORT));
+    packet.append(Umgp.dataPart(Umgp.KEY, que.getKey()));
+    packet.append(Umgp.dataPart(Umgp.CODE, que.getCode()));
+    packet.append(Umgp.dataPart(Umgp.DATA, que.getData()));
+    packet.append(Umgp.dataPart(Umgp.DATE, que.getDate()));
+    packet.append(Umgp.dataPart(Umgp.NET, que.getNet()));
+    packet.append(Umgp.end());
+    channel.writeAndFlush(packet.toString());
   }
 }

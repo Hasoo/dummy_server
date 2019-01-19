@@ -20,11 +20,11 @@ public class FileSequenceTest {
       }
 
       /*
-       * , benchmark(1,000,000) opened:117,647 reopen:153,846 reopen lock:222,222
+       * benchmark(1,000,000) opened:117,647 reopen:153,846 reopen lock:222,222
        */
 
-      // int maxValue = 1_000;
-      int maxValue = 1_000_000;
+      int maxValue = 1_000;
+      // int maxValue = 1_000_000;
       FileSequence fileSequence = new FileSequence(path, filename, maxValue);
       for (int i = 1; i <= maxValue; i++) {
         Assertions.assertEquals(String.valueOf(i), fileSequence.getSequence());

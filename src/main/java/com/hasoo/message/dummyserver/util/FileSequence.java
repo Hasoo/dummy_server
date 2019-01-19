@@ -1,6 +1,7 @@
 package com.hasoo.message.dummyserver.util;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
@@ -69,7 +70,7 @@ public class FileSequence {
     fileChannel.write(buffer);
   }
 
-  public String readSequence() throws IOException {
+  public synchronized String readSequence() throws IOException {
     Path p = Util.getFilePath(this.path, this.filename);
     if (null == this.fileChannel) {
       this.fileChannel = FileChannel.open(p, StandardOpenOption.CREATE, StandardOpenOption.READ,
@@ -95,13 +96,13 @@ public class FileSequence {
     return Integer.valueOf(sequenceValue).toString();
   }
 
-  public void close() throws IOException {
+  public synchronized void close() throws IOException {
     if (null != this.fileChannel) {
       this.fileChannel.close();
     }
   }
 
-  private String writeSequence(int value) throws IOException {
+  private synchronized String writeSequence(int value) throws IOException {
     String updatedValue = String.format("%010d", value);
     ByteBuffer buffer = ByteBuffer.wrap(updatedValue.getBytes());
     this.fileChannel.position(0);

@@ -1,6 +1,8 @@
 package com.hasoo.message.dummyserver.netty;
 
 import java.util.concurrent.TimeUnit;
+import com.hasoo.message.dummyserver.umgp.ReportDeliverThread;
+import com.hasoo.message.dummyserver.umgp.TapeDeliveryRepository;
 import com.hasoo.message.dummyserver.umgp.UmgpWorker;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -14,7 +16,9 @@ import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.string.LineEncoder;
 import io.netty.handler.codec.string.LineSeparator;
 import io.netty.handler.timeout.ReadTimeoutHandler;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class UmgpServer {
   private int port;
 
@@ -23,6 +27,12 @@ public class UmgpServer {
   }
 
   public void run() throws Exception {
+
+    UmgpWorker umgpWorker = new UmgpWorker(new TapeDeliveryRepository());
+
+    ReportDeliverThread reportDeliverThread = new ReportDeliverThread(umgpWorker);
+    reportDeliverThread.start();
+
     EventLoopGroup serverGroup = new NioEventLoopGroup();
     EventLoopGroup childGroup = new NioEventLoopGroup();
 
@@ -32,8 +42,6 @@ public class UmgpServer {
           @Override
           protected void initChannel(SocketChannel ch) throws Exception {
         /* @formatter:off */
-            UmgpWorker umgpWorker = new UmgpWorker();
-
             ch.pipeline()
                 .addLast(new ReadTimeoutHandler(60, TimeUnit.SECONDS))
                 .addLast(new LineEncoder(LineSeparator.WINDOWS))
@@ -46,6 +54,8 @@ public class UmgpServer {
         }).childOption(ChannelOption.TCP_NODELAY, true);
 
     ChannelFuture f = serverBootstrap.bind(port).sync();
+    log.debug("complete binding");
     f.channel().closeFuture().sync();
+    log.debug("server exited");
   }
 }

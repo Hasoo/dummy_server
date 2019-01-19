@@ -3,6 +3,8 @@ package com.hasoo.message.dummyserver.util;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -36,5 +38,12 @@ public class Util {
 
   public static String convert(ByteBuffer buf) {
     return new String(buf.array(), StandardCharsets.UTF_8).trim();
+  }
+
+  public static String getStackTrace(final Throwable throwable) {
+    final StringWriter sw = new StringWriter();
+    final PrintWriter pw = new PrintWriter(sw, true);
+    throwable.printStackTrace(pw);
+    return sw.getBuffer().toString();
   }
 }
