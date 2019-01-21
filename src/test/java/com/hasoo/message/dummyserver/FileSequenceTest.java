@@ -10,7 +10,7 @@ import com.hasoo.message.dummyserver.util.FileSequence;
 import com.hasoo.message.dummyserver.util.Util;
 
 public class FileSequenceTest {
-  private File file = Util.getFilePath("./seq", "test.seq").toFile();
+  private File file = Util.getFilePath("./seq/test", "test.seq").toFile();
 
   @BeforeEach
   public void setUp() {

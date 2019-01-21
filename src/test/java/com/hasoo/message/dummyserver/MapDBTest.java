@@ -42,7 +42,7 @@ public class MapDBTest implements Serializable {
     }
   }
 
-  private File file = Util.getFilePath("./db", "report.db").toFile();
+  private File file = Util.getFilePath("./db/test", "report.db").toFile();
 
   @BeforeEach
   public void setUp() {

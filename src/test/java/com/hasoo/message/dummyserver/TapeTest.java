@@ -51,7 +51,7 @@ public class TapeTest {
     }
   }
 
-  private File file = Util.getFilePath("./que", "test.que").toFile();
+  private File file = Util.getFilePath("./que/test", "test.que").toFile();
 
   @BeforeEach
   public void setUp() {
@@ -68,32 +68,38 @@ public class TapeTest {
   }
 
   @Test
-  public void testFileBasedTape() throws IOException {
-    QueueFile queueFile = new QueueFile.Builder(this.file).build();
-    ObjectQueue<Human> queue =
-        ObjectQueue.create(queueFile, new HumanConverter<Human>(Human.class));
-    String name1 = "hasoo", name2 = "kim";
-    int age1 = 39, age2 = 20;
-    queue.add(new Human(name1, age1));
-    queue.add(new Human(name2, age2));
+  public void testFileBasedTape() {
+    try (QueueFile queueFile = new QueueFile.Builder(this.file).build()) {
+      ObjectQueue<Human> queue =
+          ObjectQueue.create(queueFile, new HumanConverter<Human>(Human.class));
+      String name1 = "hasoo", name2 = "kim";
+      int age1 = 39, age2 = 20;
+      queue.add(new Human(name1, age1));
+      queue.add(new Human(name2, age2));
 
-    Assertions.assertEquals(2, queue.size());
+      Assertions.assertEquals(2, queue.size());
 
-    Human human = queue.peek();
-    queue.remove();
-    Assertions.assertEquals(name1, human.getName());
-    human = queue.peek();
-    queue.remove();
-    Assertions.assertEquals(name2, human.getName());
+      Human human = queue.peek();
+      queue.remove();
+      Assertions.assertEquals(name1, human.getName());
+      human = queue.peek();
+      queue.remove();
+      Assertions.assertEquals(name2, human.getName());
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   @Test
-  public void testByteTape() throws IOException {
-    QueueFile queueFile = new QueueFile.Builder(this.file).build();
-    for (int i = 0; i < 100; i++) {
-      queueFile.add(String.valueOf(i).getBytes());
-      queueFile.remove();
+  public void testByteTape() {
+    try (QueueFile queueFile = new QueueFile.Builder(this.file).build()) {
+      for (int i = 0; i < 100; i++) {
+        queueFile.add(String.valueOf(i).getBytes());
+        queueFile.remove();
+      }
+      Assertions.assertEquals(0, queueFile.size());
+    } catch (IOException e) {
+      e.printStackTrace();
     }
-    Assertions.assertEquals(0, queueFile.size());
   }
 }
