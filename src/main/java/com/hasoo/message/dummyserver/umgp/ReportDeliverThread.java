@@ -1,9 +1,8 @@
 package com.hasoo.message.dummyserver.umgp;
 
 public class ReportDeliverThread extends Thread {
-  UmgpWorker umgpWorker;
-
-  boolean isLoop = true;
+  private UmgpWorker umgpWorker;
+  private boolean isLoop = true;
 
   public ReportDeliverThread(UmgpWorker umgpWorker) {
     this.umgpWorker = umgpWorker;

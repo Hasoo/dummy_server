@@ -19,7 +19,7 @@ public class UmgpServerHandler extends ChannelInboundHandlerAdapter {
 
   @Override
   public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
-    log.debug("connected->{}", ctx.toString());
+    log.info("connected->{}", ctx.toString());
     umgpWorker.connected(ctx.channel());
     super.channelRegistered(ctx);
   }
@@ -37,7 +37,7 @@ public class UmgpServerHandler extends ChannelInboundHandlerAdapter {
     if (byteBuf.isReadable()) {
       String line = byteBuf.toString(Charset.defaultCharset());
       line = line.trim();
-      log.info(Util.dump(line));
+      log.debug(Util.dump(line));
       umgpWorker.receive(ctx.channel(), line);
     }
   }

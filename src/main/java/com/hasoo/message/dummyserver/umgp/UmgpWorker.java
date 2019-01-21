@@ -11,10 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class UmgpWorker {
-  ContextManager contextManager = new ContextManager();
-  LineHandler sendLineHandler = new SendLineHandler();
-  LineHandler reportLineHandler = new ReportLineHandler();
-  DeliveryRepository deliveryRepository;
+  private ContextManager contextManager = new ContextManager();
+  private LineHandler sendLineHandler = new SendLineHandler();
+  private LineHandler reportLineHandler = new ReportLineHandler();
+  private DeliveryRepository deliveryRepository;
 
   public UmgpWorker(DeliveryRepository deliveryRepository) {
     this.deliveryRepository = deliveryRepository;
@@ -41,15 +41,17 @@ public class UmgpWorker {
 
       if (umgp.isCompletedEnd()) {
         if (Umgp.HType.CONNECT == clientContext.getHeaderType()) {
+          log.debug("-> {} username:{} password:{} reportline:{} version:{}", Umgp.CONNECT,
+              umgp.getId(), umgp.getPassword(), umgp.getReportline(), umgp.getVersion());
           if (umgp.getReportline().equals("Y")) {
             clientContext.setReportline(true);
           }
           authenticate(channel, clientContext);
         } else {
           if (clientContext.isReportline()) {
-            sendLineHandler.handle(channel, clientContext);
-          } else {
             reportLineHandler.handle(channel, clientContext);
+          } else {
+            sendLineHandler.handle(channel, clientContext);
           }
         }
 
@@ -99,7 +101,7 @@ public class UmgpWorker {
       Iterator<ClientContext> it = ccs.iterator();
       while (it.hasNext()) {
         ClientContext cc = it.next();
-        ReportQue que = deliveryRepository.get(cc.getUsername());
+        ReportQue que = deliveryRepository.pop(cc.getUsername());
         if (null != que) {
           sendReport(cc.getChannel(), que);
         }
@@ -110,6 +112,8 @@ public class UmgpWorker {
   }
 
   private void sendReport(Channel channel, ReportQue que) {
+    log.debug("<- {} key:{} code:{} data:{} date:{} net:{}", Umgp.REPORT, que.getKey(),
+        que.getCode(), que.getData(), que.getDate(), que.getNet());
     StringBuilder packet = new StringBuilder();
     packet.append(Umgp.headerPart(Umgp.REPORT));
     packet.append(Umgp.dataPart(Umgp.KEY, que.getKey()));

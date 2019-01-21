@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
@@ -40,15 +42,26 @@ public class MapDBTest implements Serializable {
     }
   }
 
+  private File file = Util.getFilePath("./db", "report.db").toFile();
+
+  @BeforeEach
+  public void setUp() {
+    if (this.file.exists()) {
+      this.file.delete();
+    }
+  }
+
+  @AfterEach
+  public void setDown() {
+    if (this.file.exists()) {
+      this.file.delete();
+    }
+  }
+
   @Test
   public void testHashMap() {
-    String path = "db", file = "report.db";
-    File report = Util.getFilePath(path, file).toFile();
-    if (report.exists()) {
-      report.delete();
-    }
 
-    DB db = DBMaker.fileDB(report).fileMmapEnable().make();
+    DB db = DBMaker.fileDB(file).fileMmapEnable().make();
 
     Map<String, Human> map = db.hashMap("map").keySerializer(Serializer.STRING)
         .valueSerializer(new HumanSerializer()).createOrOpen();

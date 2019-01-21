@@ -28,7 +28,7 @@ public class UmgpServer {
 
   public void run() throws Exception {
 
-    UmgpWorker umgpWorker = new UmgpWorker(new TapeDeliveryRepository());
+    UmgpWorker umgpWorker = new UmgpWorker(TapeDeliveryRepository.getInstance());
 
     ReportDeliverThread reportDeliverThread = new ReportDeliverThread(umgpWorker);
     reportDeliverThread.start();

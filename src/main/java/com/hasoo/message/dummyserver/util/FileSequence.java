@@ -1,44 +1,34 @@
 package com.hasoo.message.dummyserver.util;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class FileSequence {
-  FileChannel fileChannel = null;
-  String path;
-  String filename;
+  private FileChannel fileChannel = null;
+  private File sequenceFile;
   int maxValue;
 
-  public FileSequence(String path, String filename, int maxValue) {
-    this.path = path;
-    this.filename = filename;
+  public FileSequence(File sequenceFile, int maxValue) {
+    this.sequenceFile = sequenceFile;
     if (1_000_000_000 < maxValue) {
       maxValue = 1_000_000_000;
     } else {
       this.maxValue = maxValue;
-
     }
   }
 
   public String getSequence() {
-
-    String sequence = null;
-
-    Path p = Util.getFilePath(this.path, this.filename);
-    try (FileChannel fileChannel = FileChannel.open(p, StandardOpenOption.CREATE,
-        StandardOpenOption.READ, StandardOpenOption.WRITE)) {
+    sequenceFile.getParentFile().mkdirs();
+    try (FileChannel fileChannel = FileChannel.open(this.sequenceFile.toPath(),
+        StandardOpenOption.CREATE, StandardOpenOption.READ, StandardOpenOption.WRITE)) {
 
       FileLock lock = fileChannel.lock();
-      // log.debug("lock status:{} shared:{}", lock.isValid(), lock.isShared());
       ByteBuffer buf = ByteBuffer.allocate(10);
       fileChannel.position(0);
       int readByte = fileChannel.read(buf, 0);
@@ -50,17 +40,16 @@ public class FileSequence {
       String sequenceValue = Util.convert(buf);
       int currentSeq = Integer.parseInt(sequenceValue);
       if (currentSeq == maxValue) {
-        log.debug("max:{} current:{}", maxValue, currentSeq);
         currentSeq = 0;
       }
       putSequence(fileChannel, currentSeq + 1);
 
-      sequence = Integer.valueOf(sequenceValue).toString();
+      return Integer.valueOf(sequenceValue).toString();
     } catch (IOException ex) {
       log.error(ex.getMessage());
     }
 
-    return sequence;
+    return null;
   }
 
   private void putSequence(FileChannel fileChannel, int value) throws IOException {
@@ -71,10 +60,10 @@ public class FileSequence {
   }
 
   public synchronized String readSequence() throws IOException {
-    Path p = Util.getFilePath(this.path, this.filename);
+    sequenceFile.getParentFile().mkdirs();
     if (null == this.fileChannel) {
-      this.fileChannel = FileChannel.open(p, StandardOpenOption.CREATE, StandardOpenOption.READ,
-          StandardOpenOption.WRITE);
+      this.fileChannel = FileChannel.open(this.sequenceFile.toPath(), StandardOpenOption.CREATE,
+          StandardOpenOption.READ, StandardOpenOption.WRITE);
     }
 
     ByteBuffer buf = ByteBuffer.allocate(10);
@@ -88,7 +77,6 @@ public class FileSequence {
     String sequenceValue = Util.convert(buf);
     int currentSeq = Integer.parseInt(sequenceValue);
     if (currentSeq == maxValue) {
-      log.debug("max:{} current:{}", maxValue, currentSeq);
       currentSeq = 0;
     }
     writeSequence(currentSeq + 1);

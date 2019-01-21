@@ -18,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class TapeDeliveryRepository implements DeliveryRepository {
-
   class DeliveryConverter<E> implements Converter<E> {
     private final Gson gson = new Gson();
 
@@ -42,8 +41,18 @@ public class TapeDeliveryRepository implements DeliveryRepository {
     }
   }
 
+  private TapeDeliveryRepository() {}
+
+  private static class SingletonHelper {
+    private static final TapeDeliveryRepository INSTANCE = new TapeDeliveryRepository();
+  }
+
+  public static TapeDeliveryRepository getInstance() {
+    return SingletonHelper.INSTANCE;
+  }
+
   @Override
-  public ReportQue get(String username) {
+  public ReportQue pop(String username) {
     File file = Util.getFilePath("./que/rslt", username).toFile();
     if (true != file.exists()) {
       return null;
@@ -53,11 +62,25 @@ public class TapeDeliveryRepository implements DeliveryRepository {
       ObjectQueue<ReportQue> queue =
           ObjectQueue.create(queueFile, new DeliveryConverter<ReportQue>(ReportQue.class));
       ReportQue que = queue.peek();
-      queue.remove();
+      if (null != que) {
+        queue.remove();
+      }
       return que;
     } catch (IOException e) {
       log.error(Util.getStackTrace(e));
     }
     return null;
+  }
+
+  @Override
+  public void push(String username, ReportQue reportQue) {
+    File file = Util.getFilePath("./que/rslt", username).toFile();
+    try (QueueFile queueFile = new QueueFile.Builder(file).build()) {
+      ObjectQueue<ReportQue> queue =
+          ObjectQueue.create(queueFile, new DeliveryConverter<ReportQue>(ReportQue.class));
+      queue.add(reportQue);
+    } catch (IOException e) {
+      log.error(Util.getStackTrace(e));
+    }
   }
 }

@@ -9,6 +9,8 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import org.apache.commons.io.HexDump;
 
 public class Util {
@@ -45,5 +47,9 @@ public class Util {
     final PrintWriter pw = new PrintWriter(sw, true);
     throwable.printStackTrace(pw);
     return sw.getBuffer().toString();
+  }
+
+  public static String getCurrentDate12() {
+    return new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
   }
 }
