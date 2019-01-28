@@ -1,7 +1,7 @@
 package com.hasoo.message.dummyserver.umgp;
 
-import com.hasoo.message.dummyserver.entity.ClientContext;
-import com.hasoo.message.dummyserver.entity.ReportQue;
+import com.hasoo.message.dummyserver.dto.ClientContext;
+import com.hasoo.message.dummyserver.dto.ReportQue;
 import com.hasoo.message.dummyserver.util.Util;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;

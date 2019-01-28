@@ -1,4 +1,4 @@
-package com.hasoo.message.dummyserver.entity;
+package com.hasoo.message.dummyserver.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

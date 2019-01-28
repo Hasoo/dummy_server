@@ -9,7 +9,7 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import com.google.gson.Gson;
-import com.hasoo.message.dummyserver.entity.ReportQue;
+import com.hasoo.message.dummyserver.dto.ReportQue;
 import com.hasoo.message.dummyserver.util.Util;
 import com.squareup.tape2.ObjectQueue;
 import com.squareup.tape2.ObjectQueue.Converter;

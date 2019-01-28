@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import com.hasoo.message.dummyserver.entity.ClientContext;
+import com.hasoo.message.dummyserver.dto.ClientContext;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelId;
 

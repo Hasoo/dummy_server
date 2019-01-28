@@ -37,7 +37,7 @@ public class UmgpServerHandler extends ChannelInboundHandlerAdapter {
     if (byteBuf.isReadable()) {
       String line = byteBuf.toString(Charset.defaultCharset());
       line = line.trim();
-      log.debug(Util.dump(line));
+      // log.debug(Util.dump(line));
       umgpWorker.receive(ctx.channel(), line);
     }
   }

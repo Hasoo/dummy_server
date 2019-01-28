@@ -1,4 +1,4 @@
-package com.hasoo.message.dummyserver.entity;
+package com.hasoo.message.dummyserver.dto;
 
 import com.hasoo.message.dummyserver.umgp.Umgp;
 import io.netty.channel.Channel;
@@ -10,8 +10,9 @@ public class ClientContext {
   private Channel channel;
   private Umgp umgp;
 
-  Umgp.HType headerType;
-  boolean reportline;
+  private Umgp.HType headerType;
+  private boolean reportline;
+  private boolean authenticated;
 
   public ClientContext(Channel channel) {
     this.channel = channel;
@@ -19,5 +20,6 @@ public class ClientContext {
 
     this.username = "";
     this.reportline = false;
+    this.authenticated = false;
   }
 }

@@ -3,8 +3,8 @@ package com.hasoo.message.dummyserver.umgp;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Iterator;
-import com.hasoo.message.dummyserver.entity.ClientContext;
-import com.hasoo.message.dummyserver.entity.ReportQue;
+import com.hasoo.message.dummyserver.dto.ClientContext;
+import com.hasoo.message.dummyserver.dto.ReportQue;
 import com.hasoo.message.dummyserver.util.Util;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
@@ -40,13 +40,19 @@ public class UmgpWorker {
       }
 
       if (umgp.isCompletedEnd()) {
-        if (Umgp.HType.CONNECT == clientContext.getHeaderType()) {
-          log.debug("-> {} username:{} password:{} reportline:{} version:{}", Umgp.CONNECT,
-              umgp.getId(), umgp.getPassword(), umgp.getReportline(), umgp.getVersion());
-          if (umgp.getReportline().equals("Y")) {
-            clientContext.setReportline(true);
+        if (true != clientContext.isAuthenticated()) {
+          if (Umgp.HType.CONNECT == clientContext.getHeaderType()) {
+            log.debug("-> {} username:{} password:{} reportline:{} version:{}", Umgp.CONNECT,
+                umgp.getId(), umgp.getPassword(), umgp.getReportline(), umgp.getVersion());
+            if (umgp.getReportline().equals("Y")) {
+              clientContext.setReportline(true);
+            }
+            authenticate(channel, clientContext);
+          } else {
+            throw new RuntimeException(
+                String.format("authentication is required, invalid header:%s %s",
+                    clientContext.getHeaderType(), who(channel)));
           }
-          authenticate(channel, clientContext);
         } else {
           if (clientContext.isReportline()) {
             reportLineHandler.handle(channel, clientContext);
@@ -66,9 +72,9 @@ public class UmgpWorker {
   public void authenticate(Channel channel, ClientContext clientContext) {
     Umgp umgp = clientContext.getUmgp();
     clientContext.setUsername(umgp.getId());
-    log.debug("authentication username:{} password:{}", umgp.getId(), umgp.getPassword());
     if (umgp.getId().equals("test")) {
       sendConnectAck(channel, "100", "success");
+      clientContext.setAuthenticated(true);
     } else {
       sendConnectAck(channel, "200", "failure");
       channel.close();
