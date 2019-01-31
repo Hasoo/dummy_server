@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TapeDeliveryRepository implements DeliveryRepository {
   class DeliveryConverter<E> implements Converter<E> {
+    private final Object lock = new Object();
     private final Gson gson = new Gson();
 
     private Class<E> classOfT;
@@ -53,34 +54,38 @@ public class TapeDeliveryRepository implements DeliveryRepository {
 
   @Override
   public ReportQue pop(String username) {
-    File file = Util.getFilePath("./que/rslt", username).toFile();
-    if (true != file.exists()) {
-      return null;
-    }
-
-    try (QueueFile queueFile = new QueueFile.Builder(file).build()) {
-      ObjectQueue<ReportQue> queue =
-          ObjectQueue.create(queueFile, new DeliveryConverter<ReportQue>(ReportQue.class));
-      ReportQue que = queue.peek();
-      if (null != que) {
-        queue.remove();
+    synchronized (this) {
+      File file = Util.getFilePath("./que/rslt", username).toFile();
+      if (true != file.exists()) {
+        return null;
       }
-      return que;
-    } catch (IOException e) {
-      log.error(Util.getStackTrace(e));
+
+      try (QueueFile queueFile = new QueueFile.Builder(file).build()) {
+        ObjectQueue<ReportQue> queue =
+            ObjectQueue.create(queueFile, new DeliveryConverter<ReportQue>(ReportQue.class));
+        ReportQue que = queue.peek();
+        if (null != que) {
+          queue.remove();
+        }
+        return que;
+      } catch (IOException e) {
+        log.error(Util.getStackTrace(e));
+      }
     }
     return null;
   }
 
   @Override
   public void push(String username, ReportQue reportQue) {
-    File file = Util.getFilePath("./que/rslt", username).toFile();
-    try (QueueFile queueFile = new QueueFile.Builder(file).build()) {
-      ObjectQueue<ReportQue> queue =
-          ObjectQueue.create(queueFile, new DeliveryConverter<ReportQue>(ReportQue.class));
-      queue.add(reportQue);
-    } catch (IOException e) {
-      log.error(Util.getStackTrace(e));
+    synchronized (this) {
+      File file = Util.getFilePath("./que/rslt", username).toFile();
+      try (QueueFile queueFile = new QueueFile.Builder(file).build()) {
+        ObjectQueue<ReportQue> queue =
+            ObjectQueue.create(queueFile, new DeliveryConverter<ReportQue>(ReportQue.class));
+        queue.add(reportQue);
+      } catch (IOException e) {
+        log.error(Util.getStackTrace(e));
+      }
     }
   }
 }
