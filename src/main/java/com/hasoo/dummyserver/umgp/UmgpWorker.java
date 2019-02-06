@@ -72,7 +72,8 @@ public class UmgpWorker {
   public void authenticate(Channel channel, ClientContext clientContext) {
     Umgp umgp = clientContext.getUmgp();
     clientContext.setUsername(umgp.getId());
-    if (umgp.getId().equals("test")) {
+    if (umgp.getId().equals("test") || umgp.getId().equals("skt") || umgp.getId().equals("kt")
+        || umgp.getId().equals("lgt")) {
       sendConnectAck(channel, "100", "success");
       clientContext.setAuthenticated(true);
     } else {
