@@ -2,7 +2,6 @@ package com.hasoo.dummyserver.netty;
 
 import java.nio.charset.Charset;
 import com.hasoo.dummyserver.umgp.UmgpWorker;
-import com.hasoo.dummyserver.util.HUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -34,11 +33,15 @@ public class UmgpServerHandler extends ChannelInboundHandlerAdapter {
   @Override
   public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
     ByteBuf byteBuf = (ByteBuf) msg;
-    if (byteBuf.isReadable()) {
-      String line = byteBuf.toString(Charset.defaultCharset());
-      line = line.trim();
-      // log.debug(Util.dump(line));
-      umgpWorker.receive(ctx.channel(), line);
+    try {
+      if (byteBuf.isReadable()) {
+        String line = byteBuf.toString(Charset.defaultCharset());
+        line = line.trim();
+        // log.debug(Util.dump(line));
+        umgpWorker.receive(ctx.channel(), line);
+      }
+    } finally {
+      byteBuf.release();
     }
   }
 
