@@ -1,5 +1,8 @@
-package com.hasoo.message.dummyserver.umgp;
+package com.hasoo.dummyserver.umgp;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class ReportDeliverThread extends Thread {
   private UmgpWorker umgpWorker;
   private boolean isLoop = true;
@@ -13,6 +16,7 @@ public class ReportDeliverThread extends Thread {
     while (this.isLoop) {
       umgpWorker.deliver();
     }
+    log.debug("exited");
   }
 
   public void exit() {

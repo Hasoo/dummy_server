@@ -1,6 +1,6 @@
-package com.hasoo.message.dummyserver.umgp;
+package com.hasoo.dummyserver.umgp;
 
-import com.hasoo.message.dummyserver.dto.ClientContext;
+import com.hasoo.dummyserver.dto.ClientContext;
 import io.netty.channel.Channel;
 
 public interface LineHandler {

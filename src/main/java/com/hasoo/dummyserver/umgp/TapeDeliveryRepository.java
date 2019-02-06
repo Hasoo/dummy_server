@@ -1,4 +1,4 @@
-package com.hasoo.message.dummyserver.umgp;
+package com.hasoo.dummyserver.umgp;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -9,8 +9,8 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import com.google.gson.Gson;
-import com.hasoo.message.dummyserver.dto.ReportQue;
-import com.hasoo.message.dummyserver.util.Util;
+import com.hasoo.dummyserver.dto.ReportQue;
+import com.hasoo.dummyserver.util.HUtil;
 import com.squareup.tape2.ObjectQueue;
 import com.squareup.tape2.ObjectQueue.Converter;
 import com.squareup.tape2.QueueFile;
@@ -55,7 +55,7 @@ public class TapeDeliveryRepository implements DeliveryRepository {
   @Override
   public ReportQue pop(String username) {
     synchronized (this) {
-      File file = Util.getFilePath("./que/rslt", username).toFile();
+      File file = HUtil.getFilePath("./que/rslt", username).toFile();
       if (true != file.exists()) {
         return null;
       }
@@ -69,7 +69,7 @@ public class TapeDeliveryRepository implements DeliveryRepository {
         }
         return que;
       } catch (IOException e) {
-        log.error(Util.getStackTrace(e));
+        log.error(HUtil.getStackTrace(e));
       }
     }
     return null;
@@ -78,13 +78,13 @@ public class TapeDeliveryRepository implements DeliveryRepository {
   @Override
   public void push(String username, ReportQue reportQue) {
     synchronized (this) {
-      File file = Util.getFilePath("./que/rslt", username).toFile();
+      File file = HUtil.getFilePath("./que/rslt", username).toFile();
       try (QueueFile queueFile = new QueueFile.Builder(file).build()) {
         ObjectQueue<ReportQue> queue =
             ObjectQueue.create(queueFile, new DeliveryConverter<ReportQue>(ReportQue.class));
         queue.add(reportQue);
       } catch (IOException e) {
-        log.error(Util.getStackTrace(e));
+        log.error(HUtil.getStackTrace(e));
       }
     }
   }

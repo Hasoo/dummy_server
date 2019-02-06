@@ -1,9 +1,9 @@
-package com.hasoo.message.dummyserver.netty;
+package com.hasoo.dummyserver.netty;
 
 import java.util.concurrent.TimeUnit;
-import com.hasoo.message.dummyserver.umgp.ReportDeliverThread;
-import com.hasoo.message.dummyserver.umgp.TapeDeliveryRepository;
-import com.hasoo.message.dummyserver.umgp.UmgpWorker;
+import com.hasoo.dummyserver.umgp.ReportDeliverThread;
+import com.hasoo.dummyserver.umgp.TapeDeliveryRepository;
+import com.hasoo.dummyserver.umgp.UmgpWorker;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -20,21 +20,20 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class UmgpServer {
-  private int port;
+  private EventLoopGroup serverGroup = new NioEventLoopGroup();
+  private EventLoopGroup childGroup = new NioEventLoopGroup();
+  private UmgpWorker umgpWorker;
+  private int port = 4000;
 
-  public UmgpServer(int port) {
+  public UmgpServer(UmgpWorker umgpWorker) {
+    this.umgpWorker = umgpWorker;
+  }
+
+  public void port(int port) {
     this.port = port;
   }
 
   public void run() throws Exception {
-
-    UmgpWorker umgpWorker = new UmgpWorker(TapeDeliveryRepository.getInstance());
-
-    ReportDeliverThread reportDeliverThread = new ReportDeliverThread(umgpWorker);
-    reportDeliverThread.start();
-
-    EventLoopGroup serverGroup = new NioEventLoopGroup();
-    EventLoopGroup childGroup = new NioEventLoopGroup();
 
     ServerBootstrap serverBootstrap = new ServerBootstrap();
     serverBootstrap.group(serverGroup, childGroup).channel(NioServerSocketChannel.class)
@@ -54,8 +53,12 @@ public class UmgpServer {
         }).childOption(ChannelOption.TCP_NODELAY, true);
 
     ChannelFuture f = serverBootstrap.bind(port).sync();
-    log.debug("complete binding");
     f.channel().closeFuture().sync();
-    log.debug("server exited");
+    log.debug("exited");
+  }
+
+  public void shutdown() {
+    serverGroup.shutdownGracefully();
+    childGroup.shutdownGracefully();
   }
 }

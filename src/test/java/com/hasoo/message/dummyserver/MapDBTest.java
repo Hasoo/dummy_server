@@ -13,7 +13,7 @@ import org.mapdb.DBMaker;
 import org.mapdb.DataInput2;
 import org.mapdb.DataOutput2;
 import org.mapdb.Serializer;
-import com.hasoo.message.dummyserver.util.Util;
+import com.hasoo.dummyserver.util.HUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -42,7 +42,7 @@ public class MapDBTest implements Serializable {
     }
   }
 
-  private File file = Util.getFilePath("./db/test", "report.db").toFile();
+  private File file = HUtil.getFilePath("./db/test", "report.db").toFile();
 
   @BeforeEach
   public void setUp() {

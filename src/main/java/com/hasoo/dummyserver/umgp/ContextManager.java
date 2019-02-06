@@ -1,10 +1,10 @@
-package com.hasoo.message.dummyserver.umgp;
+package com.hasoo.dummyserver.umgp;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import com.hasoo.message.dummyserver.dto.ClientContext;
+import com.hasoo.dummyserver.dto.ClientContext;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelId;
 

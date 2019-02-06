@@ -1,8 +1,8 @@
-package com.hasoo.message.dummyserver.umgp;
+package com.hasoo.dummyserver.umgp;
 
-import com.hasoo.message.dummyserver.dto.ClientContext;
-import com.hasoo.message.dummyserver.dto.ReportQue;
-import com.hasoo.message.dummyserver.util.Util;
+import com.hasoo.dummyserver.dto.ClientContext;
+import com.hasoo.dummyserver.dto.ReportQue;
+import com.hasoo.dummyserver.util.HUtil;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 
@@ -90,6 +90,6 @@ public class SendLineHandler implements LineHandler {
       }
     }
 
-    deliveryRepository.push(username, new ReportQue(key, code, data, Util.getCurrentDate12(), net));
+    deliveryRepository.push(username, new ReportQue(key, code, data, HUtil.getCurrentDate12(), net));
   }
 }

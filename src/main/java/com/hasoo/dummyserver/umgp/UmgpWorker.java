@@ -1,11 +1,11 @@
-package com.hasoo.message.dummyserver.umgp;
+package com.hasoo.dummyserver.umgp;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Iterator;
-import com.hasoo.message.dummyserver.dto.ClientContext;
-import com.hasoo.message.dummyserver.dto.ReportQue;
-import com.hasoo.message.dummyserver.util.Util;
+import com.hasoo.dummyserver.dto.ClientContext;
+import com.hasoo.dummyserver.dto.ReportQue;
+import com.hasoo.dummyserver.util.HUtil;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 
@@ -113,7 +113,7 @@ public class UmgpWorker {
         }
       }
     } catch (Exception ex) {
-      log.error(Util.getStackTrace(ex));
+      log.error(HUtil.getStackTrace(ex));
     }
   }
 

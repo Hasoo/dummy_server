@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import com.hasoo.message.dummyserver.umgp.Umgp;
+import com.hasoo.dummyserver.umgp.Umgp;
 import lombok.extern.slf4j.Slf4j;
 
 public class UmgpTest {

@@ -1,4 +1,4 @@
-package com.hasoo.message.dummyserver.umgp;
+package com.hasoo.dummyserver.umgp;
 
 import lombok.Data;
 

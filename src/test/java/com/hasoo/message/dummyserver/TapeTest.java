@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import com.google.gson.Gson;
-import com.hasoo.message.dummyserver.util.Util;
+import com.hasoo.dummyserver.util.HUtil;
 import com.squareup.tape2.ObjectQueue;
 import com.squareup.tape2.ObjectQueue.Converter;
 import com.squareup.tape2.QueueFile;
@@ -51,7 +51,7 @@ public class TapeTest {
     }
   }
 
-  private File file = Util.getFilePath("./que/test", "test.que").toFile();
+  private File file = HUtil.getFilePath("./que/test", "test.que").toFile();
 
   @BeforeEach
   public void setUp() {

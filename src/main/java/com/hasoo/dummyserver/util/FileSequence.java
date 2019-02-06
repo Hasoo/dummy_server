@@ -1,4 +1,4 @@
-package com.hasoo.message.dummyserver.util;
+package com.hasoo.dummyserver.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +37,7 @@ public class FileSequence {
         return "1";
       }
 
-      String sequenceValue = Util.convert(buf);
+      String sequenceValue = HUtil.convert(buf);
       int currentSeq = Integer.parseInt(sequenceValue);
       if (currentSeq == maxValue) {
         currentSeq = 0;
@@ -74,7 +74,7 @@ public class FileSequence {
       return "1";
     }
 
-    String sequenceValue = Util.convert(buf);
+    String sequenceValue = HUtil.convert(buf);
     int currentSeq = Integer.parseInt(sequenceValue);
     if (currentSeq == maxValue) {
       currentSeq = 0;

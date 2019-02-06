@@ -1,8 +1,8 @@
-package com.hasoo.message.dummyserver.netty;
+package com.hasoo.dummyserver.netty;
 
 import java.nio.charset.Charset;
-import com.hasoo.message.dummyserver.umgp.UmgpWorker;
-import com.hasoo.message.dummyserver.util.Util;
+import com.hasoo.dummyserver.umgp.UmgpWorker;
+import com.hasoo.dummyserver.util.HUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;

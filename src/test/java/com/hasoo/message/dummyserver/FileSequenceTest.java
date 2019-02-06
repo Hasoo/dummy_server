@@ -6,11 +6,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import com.hasoo.message.dummyserver.util.FileSequence;
-import com.hasoo.message.dummyserver.util.Util;
+import com.hasoo.dummyserver.util.FileSequence;
+import com.hasoo.dummyserver.util.HUtil;
 
 public class FileSequenceTest {
-  private File file = Util.getFilePath("./seq/test", "test.seq").toFile();
+  private File file = HUtil.getFilePath("./seq/test", "test.seq").toFile();
 
   @BeforeEach
   public void setUp() {
