@@ -4,8 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 import com.hasoo.dummyserver.netty.UmgpServer;
+import com.hasoo.dummyserver.umgp.MemDeliveryRepository;
 import com.hasoo.dummyserver.umgp.ReportDeliverThread;
-import com.hasoo.dummyserver.umgp.TapeDeliveryRepository;
 import com.hasoo.dummyserver.umgp.UmgpWorker;
 import com.hasoo.dummyserver.util.HUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ public class App {
 
     log.info("umgp port:{}", umgpPort);
 
-    UmgpWorker umgpWorker = new UmgpWorker(TapeDeliveryRepository.getInstance());
+    UmgpWorker umgpWorker = new UmgpWorker(MemDeliveryRepository.getInstance());
 
     ReportDeliverThread reportDeliverThread = new ReportDeliverThread(umgpWorker);
     reportDeliverThread.start();

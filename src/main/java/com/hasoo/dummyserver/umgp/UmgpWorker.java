@@ -12,12 +12,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UmgpWorker {
   private ContextManager contextManager = new ContextManager();
-  private LineHandler sendLineHandler = new SendLineHandler();
+  private LineHandler sendLineHandler;
   private LineHandler reportLineHandler = new ReportLineHandler();
   private DeliveryRepository deliveryRepository;
 
   public UmgpWorker(DeliveryRepository deliveryRepository) {
     this.deliveryRepository = deliveryRepository;
+    this.sendLineHandler = new SendLineHandler(deliveryRepository);
   }
 
   public void connected(Channel channel) {
@@ -102,7 +103,7 @@ public class UmgpWorker {
     return String.format("%s:%d", clientAddress.getHostName(), clientAddress.getPort());
   }
 
-  public void deliver() {
+  public boolean deliver() {
     try {
       ArrayList<ClientContext> ccs = contextManager.getReportLine();
       Iterator<ClientContext> it = ccs.iterator();
@@ -111,11 +112,13 @@ public class UmgpWorker {
         ReportQue que = deliveryRepository.pop(cc.getUsername());
         if (null != que) {
           sendReport(cc.getChannel(), que);
+          return true;
         }
       }
     } catch (Exception ex) {
       log.error(HUtil.getStackTrace(ex));
     }
+    return false;
   }
 
   private void sendReport(Channel channel, ReportQue que) {

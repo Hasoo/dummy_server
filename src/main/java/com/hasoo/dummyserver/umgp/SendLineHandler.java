@@ -9,7 +9,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SendLineHandler implements LineHandler {
 
-  private DeliveryRepository deliveryRepository = TapeDeliveryRepository.getInstance();
+  private DeliveryRepository deliveryRepository;
+
+  @SuppressWarnings("unused")
+  private SendLineHandler() {}
+
+  public SendLineHandler(DeliveryRepository deliveryRepository) {
+    this.deliveryRepository = deliveryRepository;
+  }
 
   @Override
   public void handle(Channel channel, ClientContext clientContext) {
@@ -90,6 +97,7 @@ public class SendLineHandler implements LineHandler {
       }
     }
 
-    deliveryRepository.push(username, new ReportQue(key, code, data, HUtil.getCurrentDate12(), net));
+    deliveryRepository.push(username,
+        new ReportQue(key, code, data, HUtil.getCurrentDate12(), net));
   }
 }

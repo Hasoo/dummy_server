@@ -91,6 +91,15 @@ public class HUtil {
     return null;
   }
 
+  public static Date getDate12(String yyyymmddhh24mi) {
+    final SimpleDateFormat dt = new SimpleDateFormat("yyyyMMddHHmm");
+    try {
+      return dt.parse(yyyymmddhh24mi);
+    } catch (ParseException e) {
+    }
+    return null;
+  }
+
   public static Properties getProperties(String filename)
       throws FileNotFoundException, IOException {
     final Properties properties = new Properties();

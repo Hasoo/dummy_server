@@ -19,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TapeDeliveryRepository implements DeliveryRepository {
   class DeliveryConverter<E> implements Converter<E> {
-    private final Object lock = new Object();
     private final Gson gson = new Gson();
 
     private Class<E> classOfT;

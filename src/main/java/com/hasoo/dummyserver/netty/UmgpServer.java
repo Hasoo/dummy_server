@@ -1,8 +1,6 @@
 package com.hasoo.dummyserver.netty;
 
 import java.util.concurrent.TimeUnit;
-import com.hasoo.dummyserver.umgp.ReportDeliverThread;
-import com.hasoo.dummyserver.umgp.TapeDeliveryRepository;
 import com.hasoo.dummyserver.umgp.UmgpWorker;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;

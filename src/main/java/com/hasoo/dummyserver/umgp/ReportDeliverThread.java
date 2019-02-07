@@ -1,5 +1,6 @@
 package com.hasoo.dummyserver.umgp;
 
+import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -14,7 +15,12 @@ public class ReportDeliverThread extends Thread {
   @Override
   public void run() {
     while (this.isLoop) {
-      umgpWorker.deliver();
+      if (true != umgpWorker.deliver()) {
+        try {
+          TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+        }
+      }
     }
     log.debug("exited");
   }
