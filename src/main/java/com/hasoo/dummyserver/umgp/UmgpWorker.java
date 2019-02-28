@@ -12,14 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UmgpWorker {
   private ContextManager contextManager = new ContextManager();
-  private LineHandler sendLineHandler;
+  private LineHandler sendLineHandler = new SendLineHandler();
   private LineHandler reportLineHandler = new ReportLineHandler();
-  private DeliveryRepository deliveryRepository;
-
-  public UmgpWorker(DeliveryRepository deliveryRepository) {
-    this.deliveryRepository = deliveryRepository;
-    this.sendLineHandler = new SendLineHandler(deliveryRepository);
-  }
+  private DeliveryRepository deliveryRepository = MemDeliveryRepository.getInstance();
 
   public void connected(Channel channel) {
     contextManager.put(channel);
