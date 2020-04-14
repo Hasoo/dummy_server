@@ -65,7 +65,7 @@ public class MapDBTest implements Serializable {
 
     @Override
     public void serialize(DataOutput2 out, Human value) throws IOException {
-      out.writeutf(value.getname());
+      out.writeUTF(value.getName());
       out.writeInt(value.getAge());
     }
 
