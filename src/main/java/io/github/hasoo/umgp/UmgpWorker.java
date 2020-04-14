@@ -1,30 +1,29 @@
-package io.github.hasoo.umgp;
-
-import io.github.hasoo.dto.ClientContext;
-import io.github.hasoo.dto.ReportQue;
-import io.github.hasoo.util.HUtil;
-import io.netty.channel.Channel;
-import lombok.extern.slf4j.Slf4j;
+package com.hasoo.dummyserver.umgp;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Iterator;
+import com.hasoo.dummyserver.dto.ClientContext;
+import com.hasoo.dummyserver.dto.ReportQue;
+import com.hasoo.dummyserver.util.HUtil;
+import io.netty.channel.Channel;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class UmgpWorker {
-    private final ContextManager contextManager = new ContextManager();
-    private final LineHandler sendLineHandler;
-    private final LineHandler reportLineHandler = new ReportLineHandler();
-    private final DeliveryRepository deliveryRepository;
+  private ContextManager contextManager = new ContextManager();
+  private LineHandler sendLineHandler;
+  private LineHandler reportLineHandler = new ReportLineHandler();
+  private DeliveryRepository deliveryRepository;
 
-    public UmgpWorker(DeliveryRepository deliveryRepository) {
-        this.deliveryRepository = deliveryRepository;
-        this.sendLineHandler = new SendLineHandler(deliveryRepository);
-    }
+  public UmgpWorker(DeliveryRepository deliveryRepository) {
+    this.deliveryRepository = deliveryRepository;
+    this.sendLineHandler = new SendLineHandler(deliveryRepository);
+  }
 
-    public void connected(Channel channel) {
-        contextManager.put(channel);
-    }
+  public void connected(Channel channel) {
+    contextManager.put(channel);
+  }
 
   public void disconnected(Channel channel) {
     contextManager.remove(channel);

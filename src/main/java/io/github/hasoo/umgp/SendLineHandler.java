@@ -9,14 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SendLineHandler implements LineHandler {
 
-  private DeliveryRepository deliveryRepository;
-
-  @SuppressWarnings("unused")
-  private SendLineHandler() {}
-
-  public SendLineHandler(DeliveryRepository deliveryRepository) {
-    this.deliveryRepository = deliveryRepository;
-  }
+  private DeliveryRepository deliveryRepository = MemDeliveryRepository.getInstance();
 
   @Override
   public void handle(Channel channel, ClientContext clientContext) {
