@@ -1,6 +1,6 @@
-package com.hasoo.dummyserver.dto;
+package io.github.hasoo.dto;
 
-import com.hasoo.dummyserver.umgp.Umgp;
+import io.github.hasoo.umgp.Umgp;
 import io.netty.channel.Channel;
 import lombok.Data;
 

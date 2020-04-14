@@ -1,18 +1,18 @@
-package com.hasoo.dummyserver;
+package io.github.hasoo;
 
-import java.io.FileNotFoundException;
+import io.github.hasoo.netty.UmgpServer;
+import io.github.hasoo.umgp.MemDeliveryRepository;
+import io.github.hasoo.umgp.ReportDeliverThread;
+import io.github.hasoo.umgp.UmgpWorker;
+import io.github.hasoo.util.HUtil;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 import java.util.Properties;
-import com.hasoo.dummyserver.netty.UmgpServer;
-import com.hasoo.dummyserver.umgp.MemDeliveryRepository;
-import com.hasoo.dummyserver.umgp.ReportDeliverThread;
-import com.hasoo.dummyserver.umgp.UmgpWorker;
-import com.hasoo.dummyserver.util.HUtil;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class App {
-  public static void main(String[] args) throws FileNotFoundException, IOException {
+  public static void main(String[] args) throws IOException {
 
     final String propFilename = "./cfg/application.properties";
     Properties prop = HUtil.getProperties(propFilename);

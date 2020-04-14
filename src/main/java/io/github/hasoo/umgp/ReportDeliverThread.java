@@ -1,16 +1,17 @@
-package com.hasoo.dummyserver.umgp;
+package io.github.hasoo.umgp;
+
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.TimeUnit;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ReportDeliverThread extends Thread {
-  private UmgpWorker umgpWorker;
-  private boolean isLoop = true;
+    private final UmgpWorker umgpWorker;
+    private boolean isLoop = true;
 
-  public ReportDeliverThread(UmgpWorker umgpWorker) {
-    this.umgpWorker = umgpWorker;
-  }
+    public ReportDeliverThread(UmgpWorker umgpWorker) {
+        this.umgpWorker = umgpWorker;
+    }
 
   @Override
   public void run() {

@@ -1,30 +1,24 @@
-package com.hasoo.dummyserver.umgp;
+package io.github.hasoo.umgp;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
 import com.google.gson.Gson;
-import com.hasoo.dummyserver.dto.ReportQue;
-import com.hasoo.dummyserver.util.HUtil;
 import com.squareup.tape2.ObjectQueue;
 import com.squareup.tape2.ObjectQueue.Converter;
 import com.squareup.tape2.QueueFile;
+import io.github.hasoo.dto.ReportQue;
+import io.github.hasoo.util.HUtil;
 import lombok.extern.slf4j.Slf4j;
+
+import java.io.*;
 
 @Slf4j
 public class TapeDeliveryRepository implements DeliveryRepository {
-  class DeliveryConverter<E> implements Converter<E> {
-    private final Gson gson = new Gson();
+    class DeliveryConverter<E> implements Converter<E> {
+        private final Gson gson = new Gson();
 
-    private Class<E> classOfT;
+        private final Class<E> classOfT;
 
-    public DeliveryConverter(Class<E> classOfT) {
-      this.classOfT = classOfT;
+        public DeliveryConverter(Class<E> classOfT) {
+            this.classOfT = classOfT;
     }
 
     @Override

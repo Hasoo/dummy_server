@@ -1,20 +1,21 @@
-package com.hasoo.dummyserver.netty;
+package io.github.hasoo.netty;
 
-import java.nio.charset.Charset;
-import com.hasoo.dummyserver.umgp.UmgpWorker;
+import io.github.hasoo.umgp.UmgpWorker;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.nio.charset.Charset;
+
 @Slf4j
 public class UmgpServerHandler extends ChannelInboundHandlerAdapter {
 
-  private UmgpWorker umgpWorker;
+    private final UmgpWorker umgpWorker;
 
-  public UmgpServerHandler(UmgpWorker umgpWorker) {
-    this.umgpWorker = umgpWorker;
-  }
+    public UmgpServerHandler(UmgpWorker umgpWorker) {
+        this.umgpWorker = umgpWorker;
+    }
 
   @Override
   public void channelRegistered(ChannelHandlerContext ctx) throws Exception {

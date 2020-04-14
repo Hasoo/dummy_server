@@ -1,22 +1,20 @@
-package com.hasoo.dummyserver.umgp;
+package io.github.hasoo.umgp;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
-import com.hasoo.dummyserver.dto.ReportQue;
+import io.github.hasoo.dto.ReportQue;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.*;
 
 @Slf4j
 public class MemDeliveryRepository implements DeliveryRepository {
 
-  private Map<String, Queue<ReportQue>> reportQues = new HashMap<>();
+    private final Map<String, Queue<ReportQue>> reportQues = new HashMap<>();
 
-  private MemDeliveryRepository() {}
+    private MemDeliveryRepository() {
+    }
 
-  private static class SingletonHelper {
-    private static final MemDeliveryRepository INSTANCE = new MemDeliveryRepository();
+    private static class SingletonHelper {
+        private static final MemDeliveryRepository INSTANCE = new MemDeliveryRepository();
   }
 
   public static MemDeliveryRepository getInstance() {

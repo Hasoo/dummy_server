@@ -1,8 +1,8 @@
-package com.hasoo.dummyserver.umgp;
+package io.github.hasoo.umgp;
 
-import com.hasoo.dummyserver.dto.ClientContext;
-import com.hasoo.dummyserver.dto.ReportQue;
-import com.hasoo.dummyserver.util.HUtil;
+import io.github.hasoo.dto.ClientContext;
+import io.github.hasoo.dto.ReportQue;
+import io.github.hasoo.util.HUtil;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 

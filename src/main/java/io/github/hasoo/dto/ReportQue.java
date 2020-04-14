@@ -1,4 +1,4 @@
-package com.hasoo.dummyserver.dto;
+package io.github.hasoo.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

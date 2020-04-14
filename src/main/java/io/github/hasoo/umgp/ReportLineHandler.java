@@ -1,6 +1,6 @@
-package com.hasoo.dummyserver.umgp;
+package io.github.hasoo.umgp;
 
-import com.hasoo.dummyserver.dto.ClientContext;
+import io.github.hasoo.dto.ClientContext;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 

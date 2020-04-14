@@ -1,4 +1,6 @@
-package com.hasoo.dummyserver.util;
+package io.github.hasoo.util;
+
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,13 +8,12 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.file.StandardOpenOption;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class FileSequence {
-  private FileChannel fileChannel = null;
-  private File sequenceFile;
-  int maxValue;
+    private FileChannel fileChannel = null;
+    private final File sequenceFile;
+    int maxValue;
 
   public FileSequence(File sequenceFile, int maxValue) {
     this.sequenceFile = sequenceFile;

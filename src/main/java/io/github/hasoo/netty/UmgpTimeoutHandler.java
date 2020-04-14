@@ -1,6 +1,6 @@
-package com.hasoo.dummyserver.netty;
+package io.github.hasoo.netty;
 
-import com.hasoo.dummyserver.umgp.UmgpWorker;
+import io.github.hasoo.umgp.UmgpWorker;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.ReadTimeoutException;

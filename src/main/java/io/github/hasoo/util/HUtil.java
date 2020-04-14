@@ -1,15 +1,8 @@
-package com.hasoo.dummyserver.util;
+package io.github.hasoo.util;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import org.apache.commons.io.HexDump;
+
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -18,7 +11,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
-import org.apache.commons.io.HexDump;
 
 public class HUtil {
   public static String dump(String buf)
@@ -100,12 +92,12 @@ public class HUtil {
     return null;
   }
 
-  public static Properties getProperties(String filename)
-      throws FileNotFoundException, IOException {
-    final Properties properties = new Properties();
-    try (final FileInputStream fis = new FileInputStream(filename)) {
-      properties.load(fis);
+    public static Properties getProperties(String filename)
+            throws IOException {
+        final Properties properties = new Properties();
+        try (final FileInputStream fis = new FileInputStream(filename)) {
+            properties.load(fis);
+        }
+        return properties;
     }
-    return properties;
-  }
 }
